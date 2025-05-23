@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { submitScore } from "./controller";
+import { getMCQdata, infoTable, submitScore } from "./controller";
+
 
 const router = Router();
 
-router.get("/submit", submitScore); // endpoint: /mcq/submit
+router.post("/submit", submitScore); // endpoint: /mcq/submit
+router.get("/contestDetails/:id", infoTable);
+router.get("/MCQdata/:id", getMCQdata); // endpoint: /mcq/contestDetails/:id
 
 export default router;

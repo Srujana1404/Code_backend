@@ -21,6 +21,15 @@ CREATE TABLE contests (
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
+CREATE VIEW contest_with_status AS
+SELECT *,
+  CASE
+    WHEN NOW() BETWEEN start_time AND end_time THEN 'active'
+    ELSE 'inactive'
+  END AS status
+FROM contests;
+
+
 
 CREATE TABLE mcq_questions (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -50,9 +59,6 @@ CREATE TABLE contest_mcq_map (
 
 
 
-
-
-
 CREATE TABLE mcq_submissions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -60,13 +66,13 @@ CREATE TABLE mcq_submissions (
     question_id INT,
     selected_option_id INT,
     is_correct BOOLEAN,
+    marked_for_review BOOLEAN DEFAULT FALSE,
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (contest_id) REFERENCES contests(id),
     FOREIGN KEY (question_id) REFERENCES mcq_questions(id),
     FOREIGN KEY (selected_option_id) REFERENCES mcq_options(id)
 );
-
 
 
 CREATE TABLE contest_results (
@@ -76,7 +82,9 @@ CREATE TABLE contest_results (
     total_questions INT,
     correct_answers INT,
     score FLOAT,
-    user_rank INT, 
+    negative_marks FLOAT,
+    user_rank INT DEFAULT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (contest_id) REFERENCES contests(id)
 );
+
