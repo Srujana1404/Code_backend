@@ -33,7 +33,7 @@ FROM contests;
 
 CREATE TABLE mcq_questions (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    question_text TEXT NOT NULL,
+    question_text TEXT NOT NULL
 );
 
 
